@@ -13,31 +13,29 @@ public class SimpleIntake : MonoBehaviour
 
     private bool intakeActive = false;
     private InputDevice leftController;
+    private bool previousGripState = false; // track grip press state
 
     private void Update()
     {
-        // Make sure we always have a valid controller
+        // Ensure controller is valid
         if (!leftController.isValid)
         {
             leftController = InputDevices.GetDeviceAtXRNode(XRNode.LeftHand);
         }
 
-        // Check grip input
         if (leftController.isValid)
         {
-            // Some devices use gripButton (boolean)
+            // Read grip button as bool
             if (leftController.TryGetFeatureValue(CommonUsages.gripButton, out bool gripPressed))
             {
-                intakeActive = gripPressed;
-            }
+                // Detect rising edge (button just pressed down)
+                if (gripPressed && !previousGripState)
+                {
+                    intakeActive = !intakeActive; // toggle intake
+                    Debug.Log("Intake " + (intakeActive ? "ON" : "OFF"));
+                }
 
-            // Some devices use grip (float 0..1)
-            if (leftController.TryGetFeatureValue(CommonUsages.grip, out float gripValue))
-            {
-                if (gripValue > 0.1f) // pressed slightly
-                    intakeActive = true;
-                else
-                    intakeActive = false;
+                previousGripState = gripPressed;
             }
         }
 
