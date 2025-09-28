@@ -28,9 +28,14 @@ public class GameManager : MonoBehaviour
     public float ropeShowTime = 30f;
     public GameObject gameOverPanel;
 
+    [Header("Extra Objects After Ropes")]
+    [SerializeField] private GameObject[] extraObjects = new GameObject[6];
+    public float extraObjectsShowTime = 20f; // NEW VARIABLE
+
     private float timer;
     private bool gameActive = false;
     private bool ropesShown = false;
+    private bool extrasShown = false; // NEW FLAG
 
     public enum ProtectionLevel
     {
@@ -50,6 +55,7 @@ public class GameManager : MonoBehaviour
 
         UpdateTimer();
         CheckRopeVisibility();
+        CheckExtraObjectsVisibility();
     }
 
     #region Core Game Functions
@@ -67,6 +73,9 @@ public class GameManager : MonoBehaviour
         SetUIState(ropesParent, false);
         SetUIState(gameOverPanel, false);
         _currentMultiplier = baseMultiplier;
+
+        foreach (var obj in extraObjects)
+            SetUIState(obj, false);
     }
 
     private void UpdateTimer()
@@ -84,6 +93,17 @@ public class GameManager : MonoBehaviour
             SetUIState(ropesParent, true);
             SetProtectionLevel(_currentProtectionLevel);
             Debug.Log($"[ROPE] Ropes visible. Protection Level: {_currentProtectionLevel}");
+        }
+    }
+
+    private void CheckExtraObjectsVisibility()
+    {
+        if (!extrasShown && timer <= extraObjectsShowTime)
+        {
+            extrasShown = true;
+            foreach (var obj in extraObjects)
+                SetUIState(obj, true);
+            Debug.Log("[EXTRA OBJECTS] Activated after extraObjectsShowTime.");
         }
     }
     #endregion
@@ -208,6 +228,7 @@ public class GameManager : MonoBehaviour
         Debug.Log($"[BIODIVERSITY] Total: {TotalBiodiversityScore} 🌍");
     }
     #endregion
+
     public void SetProtectionMultiplierLevel(int level)
     {
         if (level < 0 || level > 4) return;
