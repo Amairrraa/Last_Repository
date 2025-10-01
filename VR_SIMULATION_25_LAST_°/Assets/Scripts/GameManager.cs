@@ -8,6 +8,9 @@ public class GameManager : MonoBehaviour
     [Header("Game Over Panel Settings")]
     public TextMeshProUGUI finalScoreText;
 
+    [Header("Live Player Score Display")]
+    public TextMeshProUGUI playerScoreText; // NEW VARIABLE
+
     [Header("Scoring System")]
     public int totalBarrierScore = 0;
     public int freshwaterCount = 0;
@@ -30,12 +33,12 @@ public class GameManager : MonoBehaviour
 
     [Header("Extra Objects After Ropes")]
     [SerializeField] private GameObject[] extraObjects = new GameObject[6];
-    public float extraObjectsShowTime = 20f; // NEW VARIABLE
+    public float extraObjectsShowTime = 20f;
 
     private float timer;
     private bool gameActive = false;
     private bool ropesShown = false;
-    private bool extrasShown = false; // NEW FLAG
+    private bool extrasShown = false;
 
     public enum ProtectionLevel
     {
@@ -56,6 +59,7 @@ public class GameManager : MonoBehaviour
         UpdateTimer();
         CheckRopeVisibility();
         CheckExtraObjectsVisibility();
+        UpdatePlayerScoreDisplay(); // CONTINUOUS UPDATE
     }
 
     #region Core Game Functions
@@ -76,6 +80,8 @@ public class GameManager : MonoBehaviour
 
         foreach (var obj in extraObjects)
             SetUIState(obj, false);
+
+        UpdatePlayerScoreDisplay(); // INITIALIZE TEXT
     }
 
     private void UpdateTimer()
@@ -142,15 +148,6 @@ public class GameManager : MonoBehaviour
         float biodiversityComponent = TotalBiodiversityScore * distributionFactor;
         float finalScore = (totalBarrierScore + biodiversityComponent) * _currentMultiplier;
 
-        Debug.Log($"[SCORE] (Barrier: {totalBarrierScore} + " +
-                 $"(Bio: {TotalBiodiversityScore} × DF: {distributionFactor:F2})) × " +
-                 $"PM: {_currentMultiplier:F3} = {finalScore:F2}\n" +
-                 $"Breakdown:\n" +
-                 $"- Barriers: {totalBarrierScore}\n" +
-                 $"- Biodiversity: {TotalBiodiversityScore} × {distributionFactor:F2} = {biodiversityComponent:F2}\n" +
-                 $"- Subtotal Before PM: {totalBarrierScore + biodiversityComponent:F2}\n" +
-                 $"- After Protection Multiplier (×{_currentMultiplier:F3}): {finalScore:F2}");
-
         return finalScore;
     }
 
@@ -168,6 +165,14 @@ public class GameManager : MonoBehaviour
             > 1f and < 10f => 0.6f,
             _ => 0.5f
         };
+    }
+
+    private void UpdatePlayerScoreDisplay()
+    {
+        if (playerScoreText != null)
+        {
+            playerScoreText.text = $"Score: {GetMatchScore()}"; // NO ROUNDING
+        }
     }
     #endregion
 
@@ -187,7 +192,7 @@ public class GameManager : MonoBehaviour
         float finalScore = GetMatchScore();
 
         if (finalScoreText != null)
-            finalScoreText.text = finalScore.ToString("F0");
+            finalScoreText.text = finalScore.ToString(); // NO ROUNDING
 
         SetUIState(gameOverPanel, true);
         Time.timeScale = 0f;
@@ -206,6 +211,7 @@ public class GameManager : MonoBehaviour
     {
         totalBarrierScore++;
         Debug.Log($"[BARRIER] Score: {totalBarrierScore}");
+        UpdatePlayerScoreDisplay();
     }
 
     public void AddBiodiversity(EcosystemZone.EcosystemType type)
@@ -214,18 +220,15 @@ public class GameManager : MonoBehaviour
         {
             case EcosystemZone.EcosystemType.Freshwater:
                 freshwaterCount++;
-                Debug.Log("[BIODIVERSITY] +1 Freshwater 💧");
                 break;
             case EcosystemZone.EcosystemType.Marine:
                 marineCount++;
-                Debug.Log("[BIODIVERSITY] +1 Marine 🌊");
                 break;
             case EcosystemZone.EcosystemType.Terrestrial:
                 terrestrialCount++;
-                Debug.Log("[BIODIVERSITY] +1 Terrestrial 🌳");
                 break;
         }
-        Debug.Log($"[BIODIVERSITY] Total: {TotalBiodiversityScore} 🌍");
+        UpdatePlayerScoreDisplay();
     }
     #endregion
 
