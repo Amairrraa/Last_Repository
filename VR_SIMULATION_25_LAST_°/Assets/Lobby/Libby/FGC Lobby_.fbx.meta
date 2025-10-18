@@ -1,44 +1,9 @@
 fileFormatVersion: 2
-guid: cfab33db560f2d44abb2a9817bb950f9
+guid: 74b8a71406572bb4dbb7b076703a874f
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: ABS (White)
-    second: {fileID: 2100000, guid: a6e384e3ea0c8a34096fe3ea76f67cf7, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Glass - Heavy Color (Blue)
-    second: {fileID: 2100000, guid: 0942d31996d3e8541bdf7dc3f04e621f, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Glass - Light Color
-    second: {fileID: 2100000, guid: 19d8a5ba00c3450418d1836cecfc346f, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Glass - Light Color (Blue)
-    second: {fileID: 2100000, guid: 19d8a5ba00c3450418d1836cecfc346f, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Glass - Window
-    second: {fileID: 2100000, guid: 19d8a5ba00c3450418d1836cecfc346f, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Marble (White)
-    second: {fileID: 2100000, guid: a6e384e3ea0c8a34096fe3ea76f67cf7, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Paint - Enamel Glossy (White)
-    second: {fileID: 2100000, guid: a6e384e3ea0c8a34096fe3ea76f67cf7, type: 2}
+  externalObjects: {}
   materials:
     materialImportMode: 2
     materialName: 0
